@@ -677,8 +677,9 @@ footer{padding:34px 0 48px; text-align:center; color:var(--text-dim); font-size:
   position:relative; flex:1; min-height:340px; border-radius:16px; overflow:hidden;
   background:var(--bg-raised); cursor:zoom-in; border:0; padding:0; display:block; width:100%;
 }
-.ev-main img{width:100%; height:100%; position:absolute; inset:0; object-fit:cover; transition:transform .7s cubic-bezier(.2,.8,.2,1), opacity .35s ease}
-.ev-main:hover img{transform:scale(1.04)}
+.ev-main img{width:100%; height:100%; position:absolute; inset:0; object-fit:contain; transition:transform .7s cubic-bezier(.2,.8,.2,1), opacity .35s ease}
+.ev-main:hover img{transform:scale(1.02)}
+.ev-bg{position:absolute; inset:-30px; background-size:cover; background-position:center; filter:blur(24px) brightness(.55) saturate(1.1); transform:scale(1.08); transition:background-image .3s ease}
 .ev-main img.fading{opacity:0}
 .ev-main::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(10,14,22,.35), transparent 30%, transparent 62%, rgba(10,14,22,.75)); pointer-events:none}
 .ev-rank{
@@ -2420,7 +2421,7 @@ function renderHeroAwards(){
 const evState = {};
 function evPhotoHTML(e, i){
   const p = e.photos[i];
-  return `<img src="${IMG}${p.f}" alt="${p[currentLang]}" loading="lazy">`;
+  return `<span class="ev-bg" style="background-image:url('${IMG}${p.f}')"></span><img src="${IMG}${p.f}" alt="${p[currentLang]}" loading="lazy">`;
 }
 function renderEvents(){
   const L = T2[currentLang];
@@ -2491,6 +2492,7 @@ function setEventPhoto(id, i){
   img.classList.add("fading");
   setTimeout(()=>{
     img.src = IMG + e.photos[i].f;
+    const bg = card.querySelector(".ev-bg"); if(bg) bg.style.backgroundImage = `url('${IMG}${e.photos[i].f}')`;
     img.alt = e.photos[i][currentLang];
     img.onload = ()=> img.classList.remove("fading");
     setTimeout(()=> img.classList.remove("fading"), 400);
